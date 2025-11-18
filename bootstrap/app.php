@@ -11,23 +11,21 @@ use App\Http\Middleware\ForceJsonAuth;
 use App\Exceptions\AuthExceptionHandler;
 
 return Application::configure(basePath: dirname(__DIR__))
-    ->withProviders()
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
-        // api: __DIR__.'/../routes/api.php',
+        api: __DIR__ . '/../routes/api.php',
         commands: __DIR__ . '/../routes/console.php',
-        // channels: __DIR__.'/../routes/channels.php',
-        health: '/up',
-
-        then: function () {
-            Route::middleware('web')->group(__DIR__ . '/../routes/app.php');
-            Route::middleware([ForceJson::class])->group(__DIR__ . '/../routes/app-api.php');
-        }
+        health: '/up'
     )
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'auth' => ForceJsonAuth::class,
             'jwt.auth' => ApiAuthenticate::class,
+        ]);
+
+        // Untuk semua API route → ForceJson
+        $middleware->api(prepend: [
+            ForceJson::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
@@ -37,4 +35,4 @@ return Application::configure(basePath: dirname(__DIR__))
         });
 
     })
-->create();
+    ->create();
