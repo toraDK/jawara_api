@@ -62,44 +62,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Refresh JWT Token
-     */
-    public function refreshToken(RefreshTokenRequest $request): JsonResponse
-    {
-        // ... (Bagian ini TIDAK PERLU DIUBAH, kode lama Anda sudah oke)
-        $refreshToken = $request->validated()['refresh_token'];
-        $oldToken = RefreshToken::where('token', $refreshToken)->first();
-
-        if (!$oldToken || $oldToken->expires_at < now()) {
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Refresh token invalid or expired',
-            ], 401);
-        }
-
-        $accessToken = JWTAuth::fromUser($oldToken->user);
-        $newToken = Str::uuid()->toString();
-        $oldToken->delete();
-
-        RefreshToken::create([
-            'user_id'    => $oldToken->user_id,
-            'token'      => $newToken,
-            'expires_at' => now()->addDays(30),
-        ]);
-
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Token refreshed successfully',
-            'data'    => [
-                'access_token'  => $newToken, // Typo fix: biasanya return access token baru
-                'refresh_token' => $newToken,
-                'token_type'    => 'bearer',
-                'expires_in'    => JWTAuth::factory()->getTTL() * 60,
-            ],
-        ]);
-    }
-
-    /**
      * Register (Updated: Nullable KK Logic)
      */
     public function register(RegisterRequest $request): JsonResponse
@@ -189,6 +151,44 @@ class AuthController extends Controller
                 ],
             ], 201);
         });
+    }
+
+    /**
+     * Refresh JWT Token
+     */
+    public function refreshToken(RefreshTokenRequest $request): JsonResponse
+    {
+        // ... (Bagian ini TIDAK PERLU DIUBAH, kode lama Anda sudah oke)
+        $refreshToken = $request->validated()['refresh_token'];
+        $oldToken = RefreshToken::where('token', $refreshToken)->first();
+
+        if (!$oldToken || $oldToken->expires_at < now()) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Refresh token invalid or expired',
+            ], 401);
+        }
+
+        $accessToken = JWTAuth::fromUser($oldToken->user);
+        $newToken = Str::uuid()->toString();
+        $oldToken->delete();
+
+        RefreshToken::create([
+            'user_id'    => $oldToken->user_id,
+            'token'      => $newToken,
+            'expires_at' => now()->addDays(30),
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Token refreshed successfully',
+            'data'    => [
+                'access_token'  => $newToken, // Typo fix: biasanya return access token baru
+                'refresh_token' => $newToken,
+                'token_type'    => 'bearer',
+                'expires_in'    => JWTAuth::factory()->getTTL() * 60,
+            ],
+        ]);
     }
 
     /**

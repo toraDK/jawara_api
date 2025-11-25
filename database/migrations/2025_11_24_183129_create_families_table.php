@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('house_id')->nullable()->constrained('houses')->nullOnDelete();
             $table->string('kk_number')->nullable()->unique(); // Nomor Kartu Keluarga
-            $table->enum('ownership_status', ['owner', 'renter'])->default('owner'); // Status kepemilikan
+            $table->enum('ownership_status', ['owner', 'renter', 'family'])->default('owner');
             $table->string('status')->default('active'); // active, moved, archive
             $table->timestamps();
         });
