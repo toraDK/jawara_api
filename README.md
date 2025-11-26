@@ -1,5 +1,4 @@
-```mermaid
-
+```
     %% --- AUTH ---
     USERS ||--o{ ACTIVITY_LOGS : records
     USERS ||--o{ CITIZEN_MESSAGES : sends
