@@ -158,7 +158,6 @@ class AuthController extends Controller
      */
     public function refreshToken(RefreshTokenRequest $request): JsonResponse
     {
-        // ... (Bagian ini TIDAK PERLU DIUBAH, kode lama Anda sudah oke)
         $refreshToken = $request->validated()['refresh_token'];
         $oldToken = RefreshToken::where('token', $refreshToken)->first();
 
@@ -169,10 +168,14 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // 1. Generate Access Token Baru (JWT String Panjang)
         $accessToken = JWTAuth::fromUser($oldToken->user);
-        $newToken = Str::uuid()->toString();
-        $oldToken->delete();
 
+        // 2. Generate Refresh Token Baru (UUID Pendek)
+        $newToken = Str::uuid()->toString();
+
+        // Hapus token lama & simpan token baru
+        $oldToken->delete();
         RefreshToken::create([
             'user_id'    => $oldToken->user_id,
             'token'      => $newToken,
@@ -183,7 +186,9 @@ class AuthController extends Controller
             'status'  => 'success',
             'message' => 'Token refreshed successfully',
             'data'    => [
-                'access_token'  => $newToken, // Typo fix: biasanya return access token baru
+                // PERBAIKAN DISINI: Gunakan $accessToken, bukan $newToken
+                'access_token'  => $accessToken,
+
                 'refresh_token' => $newToken,
                 'token_type'    => 'bearer',
                 'expires_in'    => JWTAuth::factory()->getTTL() * 60,

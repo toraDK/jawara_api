@@ -1,0 +1,23 @@
+get:
+  tags:
+    - Activities
+  summary: List Activities
+  description: Mengambil daftar semua aktivitas, diurutkan dari yang terbaru.
+  operationId: getActivities
+  security:
+    - BearerToken: []
+  responses:
+    200:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              data:
+                type: array
+                items:
+                  $ref: '../../schemas/activity.yaml'

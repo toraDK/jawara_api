@@ -2,62 +2,115 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
-use App\Http\Resources\UserCollection;
-use App\Http\Requests\UserStoreRequest;
-use App\Http\Requests\UserUpdateRequest;
+use App\Http\Requests\User\StoreUserRequest;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
-    public function index(Request $request): UserCollection
+    /**
+     * B.1 List Pengguna
+     * Data: nama, email, status registrasi
+     */
+    public function index(): JsonResponse
     {
-        $search = $request->get('search', '');
+        // Mengambil semua user
+        $users = User::select('id', 'name', 'email', 'registration_status', 'role')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        $users = User::query()
-            ->where('name', 'like', "%{$search}%")
-            ->latest()
-            ->paginate();
-
-        return new UserCollection($users);
+        return response()->json([
+            'status' => 'success',
+            'data'   => $users
+        ]);
     }
 
-    public function store(UserStoreRequest $request): UserResource
-    {
-        $validated = $request->validated();
-        $validated['password'] = Hash::make($validated['password']);
-
-        $user = User::create($validated);
-
-        return new UserResource($user);
-    }
-
-    public function show(User $user): UserResource
-    {
-        return new UserResource($user);
-    }
-
-    public function update(UserUpdateRequest $request, User $user): UserResource
+    /**
+     * B.2 Tambah Pengguna (Oleh Admin)
+     * Data: nama, email, hp, password, role
+     */
+    public function store(StoreUserRequest $request): JsonResponse
     {
         $validated = $request->validated();
 
-        if (empty($validated['password'])) {
-            unset($validated['password']);
-        } else {
-            $validated['password'] = Hash::make($validated['password']);
+        // Buat User Baru
+        $user = User::create([
+            'name'                => $validated['name'],
+            'email'               => $validated['email'],
+            'phone'               => $validated['phone'],
+            'password'            => Hash::make($validated['password']), // Hash password
+            'role'                => $validated['role'],
+            'registration_status' => 'verified', // Auto verified karena dibuat admin
+        ]);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'User created successfully',
+            'data'    => $user
+        ], 201);
+    }
+
+    public function update(UpdateUserRequest $request, $id): JsonResponse
+    {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
         }
 
-        $user->update($validated);
+        $validated = $request->validated();
 
-        return new UserResource($user);
+        // Data yang akan diupdate
+        $dataToUpdate = [
+            'name'  => $validated['name'],
+            'email' => $validated['email'],
+            'phone' => $validated['phone'],
+            'role'  => $validated['role'],
+        ];
+
+        // Cek apakah password diisi? Jika ya, hash dan masukkan.
+        // Jika tidak (null), biarkan password lama.
+        if (!empty($validated['password'])) {
+            $dataToUpdate['password'] = Hash::make($validated['password']);
+        }
+
+        $user->update($dataToUpdate);
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'User updated successfully',
+            'data'    => $user
+        ]);
     }
 
-    public function destroy(User $user)
+    /**
+     * B.4 Hapus Pengguna
+     * Method: DELETE
+     */
+    public function destroy($id): JsonResponse
     {
+        $user = User::find($id);
+
+        if (!$user) {
+            return response()->json(['status' => 'error', 'message' => 'User not found'], 404);
+        }
+
+        // Opsional: Cegah Admin menghapus dirinya sendiri saat sedang login
+        if (auth()->id() == $user->id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'You cannot delete your own account'
+            ], 403);
+        }
+
         $user->delete();
-        return response()->noContent();
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'User deleted successfully'
+        ]);
     }
 }

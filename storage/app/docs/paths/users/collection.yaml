@@ -1,0 +1,81 @@
+get:
+  tags:
+    - Users
+  summary: Get List Users
+  description: Mengambil daftar pengguna (Admin View). Data yang dikembalikan meliputi nama, email, role, dan status registrasi.
+  operationId: getUsers
+  security:
+    - BearerToken: []
+  responses:
+    200:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              data:
+                type: array
+                items:
+                  $ref: '../../schemas/user.yaml'
+
+post:
+  tags:
+    - Users
+  summary: Create User (Admin)
+  description: Menambahkan pengguna baru secara manual oleh Admin (status otomatis 'verified').
+  operationId: createUser
+  security:
+    - BearerToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - email
+            - phone
+            - password
+            - role
+          properties:
+            name:
+              type: string
+              example: "Budi Santoso"
+            email:
+              type: string
+              format: email
+              example: "budi@example.com"
+            phone:
+              type: string
+              example: "081234567890"
+            password:
+              type: string
+              format: password
+              example: "secret123"
+            role:
+              type: string
+              enum: ["citizen", "admin", "security"]
+              example: "citizen"
+  responses:
+    201:
+      description: User created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: User created successfully
+              data:
+                $ref: '../../schemas/user.yaml'
+    422:
+      description: Validation Error

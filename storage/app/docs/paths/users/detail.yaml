@@ -1,0 +1,110 @@
+put:
+  tags:
+    - Users
+  summary: Update User
+  description: Memperbarui data pengguna. Password bersifat opsional (jika kosong, password lama tetap digunakan).
+  operationId: updateUser
+  security:
+    - BearerToken: []
+  parameters:
+    - name: id
+      in: path
+      description: ID User yang akan diedit
+      required: true
+      schema:
+        type: integer
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - name
+            - email
+            - phone
+            - role
+          properties:
+            name:
+              type: string
+              example: "Budi Santoso Edit"
+            email:
+              type: string
+              format: email
+              example: "budi@example.com"
+            phone:
+              type: string
+              example: "081234567899"
+            role:
+              type: string
+              enum: ["citizen", "admin", "security"]
+              example: "citizen"
+            password:
+              type: string
+              format: password
+              nullable: true
+              description: Isi jika ingin mengganti password, kosongkan jika tidak.
+              example: ""
+  responses:
+    200:
+      description: User updated successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: User updated successfully
+              data:
+                $ref: '../../schemas/user.yaml'
+    404:
+      description: User not found
+
+delete:
+  tags:
+    - Users
+  summary: Delete User
+  description: Menghapus pengguna berdasarkan ID. Admin tidak bisa menghapus akunnya sendiri yang sedang login.
+  operationId: deleteUser
+  security:
+    - BearerToken: []
+  parameters:
+    - name: id
+      in: path
+      description: ID User yang akan dihapus
+      required: true
+      schema:
+        type: integer
+  responses:
+    200:
+      description: User deleted successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: User deleted successfully
+    403:
+      description: Forbidden (Deleting own account)
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: error
+              message:
+                type: string
+                example: You cannot delete your own account
+    404:
+      description: User not found

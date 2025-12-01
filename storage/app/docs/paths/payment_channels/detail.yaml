@@ -1,0 +1,41 @@
+get:
+  tags:
+    - Payment Channels
+  summary: Get Payment Channel Detail
+  description: Mengambil detail lengkap satu metode pembayaran berdasarkan ID.
+  operationId: getPaymentChannelById
+  security:
+    - BearerToken: []
+  parameters:
+    - name: id
+      in: path
+      description: ID Payment Channel
+      required: true
+      schema:
+        type: integer
+  responses:
+    200:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              data:
+                $ref: '../../schemas/payment_channel.yaml'
+    404:
+      description: Channel not found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: error
+              message:
+                type: string
+                example: Channel not found

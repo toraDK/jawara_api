@@ -1,0 +1,22 @@
+type: object
+properties:
+  id:
+    type: integer
+    format: int64
+    example: 1
+  name:
+    type: string
+    example: "Ronda Malam"
+  activity_date:
+    type: string
+    format: date-time
+    example: "2023-10-25 20:00:00"
+  description:
+    type: string
+    example: "Jaga pos kamling RT 05"
+  status:
+    type: string
+    example: "completed"
+  category:
+    type: string
+    example: "security"

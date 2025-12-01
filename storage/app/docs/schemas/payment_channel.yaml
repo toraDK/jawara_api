@@ -1,0 +1,35 @@
+type: object
+properties:
+  id:
+    type: integer
+    format: int64
+    example: 1
+  channel_name:
+    type: string
+    example: "BCA"
+  type:
+    type: string
+    example: "bank_transfer"
+  account_number:
+    type: string
+    example: "88889999"
+    description: Ditampilkan di detail/response create, mungkin tidak muncul di list index (tergantung controller select)
+  account_name:
+    type: string
+    example: "Admin Kas"
+  thumbnail:
+    type: string
+    nullable: true
+    example: "payment_channels/bca.png"
+    description: Path relative penyimpanan file
+  qr_code:
+    type: string
+    nullable: true
+    example: "payment_qr/qr_bca.png"
+  notes:
+    type: string
+    nullable: true
+    example: "Harap sertakan berita transfer"
+  is_active:
+    type: boolean
+    example: true

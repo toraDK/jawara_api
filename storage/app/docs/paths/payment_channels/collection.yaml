@@ -1,0 +1,85 @@
+get:
+  tags:
+    - Payment Channels
+  summary: Get Active Payment Channels
+  description: Mengambil daftar metode pembayaran yang aktif (ringkas).
+  operationId: getPaymentChannels
+  security:
+    - BearerToken: []
+  responses:
+    200:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              data:
+                type: array
+                items:
+                  $ref: '../../schemas/payment_channel.yaml'
+
+post:
+  tags:
+    - Payment Channels
+  summary: Create Payment Channel
+  description: Menambahkan metode pembayaran baru (mendukung upload gambar).
+  operationId: createPaymentChannel
+  security:
+    - BearerToken: []
+  requestBody:
+    required: true
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          required:
+            - channel_name
+            - type
+            - account_number
+            - account_name
+          properties:
+            channel_name:
+              type: string
+              example: "BCA Transfer"
+            type:
+              type: string
+              enum: ["bank_transfer", "ewallet", "qris"]
+              example: "bank_transfer"
+            account_number:
+              type: string
+              example: "1234567890"
+            account_name:
+              type: string
+              example: "PT. Nama Perusahaan"
+            notes:
+              type: string
+              nullable: true
+              example: "Transfer nominal sesuai tagihan"
+            thumbnail:
+              type: string
+              format: binary
+              description: File gambar logo bank/wallet
+            qr_code:
+              type: string
+              format: binary
+              description: File gambar QR Code (jika ada)
+  responses:
+    201:
+      description: Payment channel created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: Payment channel created successfully
+              data:
+                $ref: '../../schemas/payment_channel.yaml'

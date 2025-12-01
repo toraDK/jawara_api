@@ -20,7 +20,16 @@ paths:
     $ref: "./paths/auth/refresh_token.yaml"
   /api/logout:
     $ref: "./paths/auth/logout.yaml"
-
+  /api/users:
+    $ref: "./paths/users/collection.yaml"
+  /api/users/{id}:
+    $ref: "./paths/users/detail.yaml"
+  /api/activities:
+    $ref: "./paths/activities/list.yaml"
+  /api/payment-channels:
+    $ref: "./paths/payment_channels/collection.yaml"
+  /api/payment-channels/{id}:
+    $ref: "./paths/payment_channels/detail.yaml"
   # Houses
   /api/houses/options:
     $ref: "./paths/houses/options.yaml"
@@ -34,5 +43,9 @@ components:
   schemas:
     User:
       $ref: "./schemas/user.yaml"
+    Activity:
+      $ref: "./schemas/activity.yaml"
+    PaymentChannel:
+       $ref: "./schemas/payment_channel.yaml"
     User Full:
       $ref: "./schemas/user_full.yaml"
