@@ -9,24 +9,12 @@ use Illuminate\Http\JsonResponse;
 
 class HouseController extends Controller
 {
-
-    // public function options()
-    // {
-    //     $houses = House::select('id', 'house_name')
-    //         ->orderBy('house_name')
-    //         ->get();
-
-    //     return response()->json($houses);
-    // }
-
     /**
      * Display a listing of the resource.
      */
     public function index(): jsonResponse
     {
-        $houses = House::select('id', 'house_name')
-            ->orderBy('house_name')
-            ->get();
+        $houses = House::orderBy('house_name')->get();
 
         // return response()->json($houses);
         return response()->json([
@@ -62,42 +50,4 @@ class HouseController extends Controller
             'data'    => $house
         ], 201);
     }
-
-    /**
-     * Display the specified resource.
-     */
-    // public function show(string $id)
-    // {
-    //     //
-    //     $show = House::findOrFail($id);
-
-    //     if ($show) {
-    //         return response()->json([
-    //             'status'  => 'success',
-    //             'message' => 'House retrieved successfully',
-    //             'data'    => $show
-    //         ], 200);
-    //     } else {
-    //         return response()->json([
-    //             'status'  => 'error',
-    //             'message' => 'House not found'
-    //         ], 404);
-    //     }
-    // }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, string $id)
-    // {
-    //     //
-    // }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy(string $id)
-    // {
-    //     //
-    // }
 }
