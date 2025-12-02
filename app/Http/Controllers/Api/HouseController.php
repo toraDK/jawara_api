@@ -42,13 +42,17 @@ class HouseController extends Controller
     public function store(Request $request): jsonResponse
     {
         $validated = $request->validate([
-            'house_name' => 'required|string',
-            'owner_name' => 'required|string',
-            'address' => 'required|string',
-            'house_type' => 'required',
-            'has_complete_facilities' => 'required|boolean',
+            'house_name' => 'nullable|string', //alamat rumah
+            'owner_name' => 'required|string', // nama pemilik
+            'address' => 'required|string', // alamat lengkap
+            'house_type' => 'required', // tipe rumah
+            'has_complete_facilities' => 'required|boolean', // fasilitas lengkap atau tidak
             'status' => 'nullable|string'
         ]);
+
+        if(!$request['house_name']){
+            $request['house_name'] = $request['address'];
+        }
 
         $house = House::create($validated);
 

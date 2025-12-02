@@ -14,15 +14,14 @@ class CitizensController extends Controller
      */
     public function index(): jsonResponse
     {
-        $citizen = Citizen::select('id', 'name')
+        $citizens = Citizen::with('house')
             ->orderBy('name')
             ->get();
 
-        // return response()->json($citizen);
         return response()->json([
             'status'  => 'success',
             'message' => 'Citizens retrieved successfully',
-            'data'    => $citizen
+            'data'   => $citizens
         ], 200);
     }
 
