@@ -40,6 +40,9 @@ Route::middleware('jwt.auth')->group(function () {
 
     // LAPORAN
     Route::get('/finance/report', [\App\Http\Controllers\Api\TransactionController::class, 'report']);
+
+    // Rumah
+    Route::resource('/houses', HouseController::class);
 });
 
 Route::fallback(function () {
