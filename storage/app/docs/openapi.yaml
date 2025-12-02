@@ -30,9 +30,14 @@ paths:
     $ref: "./paths/payment_channels/collection.yaml"
   /api/payment-channels/{id}:
     $ref: "./paths/payment_channels/detail.yaml"
-  # Houses
+  # mutations
+  /api/mutations:
+    $ref: "./paths/mutations/collection.yaml"
+  # Options
   /api/houses/options:
     $ref: "./paths/houses/options.yaml"
+  /api/families/options:
+    $ref: "./paths/families/options.yaml"
 components:
   securitySchemes:
     BearerToken:
@@ -49,3 +54,5 @@ components:
        $ref: "./schemas/payment_channel.yaml"
     User Full:
       $ref: "./schemas/user_full.yaml"
+    Mutation:
+      $ref: "./schemas/mutation.yaml"

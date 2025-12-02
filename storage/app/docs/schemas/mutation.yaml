@@ -1,0 +1,22 @@
+type: object
+properties:
+  id:
+    type: integer
+    format: int64
+    example: 1
+  date:
+    type: string
+    format: date
+    example: "2023-10-30"
+    description: Tanggal mutasi (mapped from mutation_date)
+  family_name:
+    type: string
+    example: "Bapak Budi Santoso"
+    description: Nama Kepala Keluarga atau No KK (jika citizen belum lengkap)
+  mutation_type:
+    type: string
+    enum: ["move_in", "move_out"]
+    example: "move_out"
+  reason:
+    type: string
+    example: "Pindah Tugas Dinas"

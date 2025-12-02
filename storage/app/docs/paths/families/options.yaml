@@ -1,0 +1,17 @@
+get:
+  tags:
+    - Families
+  summary: Get Family Options
+  description: Mengambil daftar keluarga dengan status 'active' untuk dropdown input. Label yang ditampilkan adalah nama Kepala Keluarga.
+  operationId: getFamilyOptions
+  security:
+    - BearerToken: []
+  responses:
+    200:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '../../schemas/family_option.yaml'

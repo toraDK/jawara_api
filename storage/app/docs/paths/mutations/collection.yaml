@@ -1,0 +1,91 @@
+get:
+  tags:
+    - Mutations
+  summary: List Mutations
+  description: |
+    Mengambil daftar mutasi warga (pindah masuk/keluar).
+    Data sudah dimapping server mengandung nama keluarga (dari Kepala Keluarga).
+  operationId: getMutations
+  security:
+    - BearerToken: []
+  responses:
+    200:
+      description: Successful operation
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              data:
+                type: array
+                items:
+                  $ref: '../../schemas/mutation.yaml'
+
+post:
+  tags:
+    - Mutations
+  summary: Create Mutation
+  description: |
+    Mencatat mutasi baru (misal: pindah keluar). Jika tipe 'move_out', status keluarga otomatis diupdate.
+  operationId: createMutation
+  security:
+    - BearerToken: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - family_id
+            - mutation_type
+            - mutation_date
+            - reason
+          properties:
+            family_id:
+              type: integer
+              example: 15
+              description: ID Keluarga yang melakukan mutasi
+            mutation_type:
+              type: string
+              enum: ["move_in", "move_out"]
+              example: "move_out"
+            mutation_date:
+              type: string
+              format: date
+              example: "2023-10-30"
+            reason:
+              type: string
+              example: "Pindah tugas kerja ke luar kota"
+  responses:
+    201:
+      description: Mutation created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: Mutation recorded successfully
+              data:
+                type: object
+                description: Raw data mutation model
+                properties:
+                  id:
+                    type: integer
+                  family_id:
+                    type: integer
+                  mutation_type:
+                    type: string
+                  mutation_date:
+                    type: string
+                    format: date
+                  reason:
+                    type: string

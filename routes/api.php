@@ -25,6 +25,10 @@ Route::middleware('jwt.auth')->group(function () {
     Route::post('/users', [UserController::class, 'store']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
+
+    Route::get('/mutations', [\App\Http\Controllers\Api\MutationController::class, 'index']);
+    Route::post('/mutations', [\App\Http\Controllers\Api\MutationController::class, 'store']);
+    Route::get('/families/options', [\App\Http\Controllers\Api\FamilyController::class, 'options']);
 });
 
 Route::fallback(function () {

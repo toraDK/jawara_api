@@ -17,7 +17,7 @@ class StorePaymentChannelRequest extends FormRequest
     {
         return [
             'channel_name'   => 'required|string|max:50',
-            'type'           => 'required|in:bank,ewallet',
+            'type'           => 'required|in:bank,ewallet,qris',
             'account_number' => 'required|numeric', // Pastikan angka
             'account_name'   => 'required|string|max:100',
             // Validasi gambar: wajib image, max 2MB
