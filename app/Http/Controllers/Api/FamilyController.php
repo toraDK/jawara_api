@@ -8,6 +8,13 @@ use Illuminate\Http\JsonResponse;
 
 class FamilyController extends Controller
 {
+
+    public function index(): JsonResponse
+    {
+        $families = Family::with('house', 'citizens')->get();
+        return response()->json($families);
+    }
+
     /**
      * Get options for select input (dropdown)
      * Format: [{id: 1]

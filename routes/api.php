@@ -32,6 +32,9 @@ Route::middleware('jwt.auth')->group(function () {
 
     Route::get('/mutations', [\App\Http\Controllers\Api\MutationController::class, 'index']);
     Route::post('/mutations', [\App\Http\Controllers\Api\MutationController::class, 'store']);
+
+    // KELUARGA
+    Route::get('/families', [\App\Http\Controllers\Api\FamilyController::class, 'index']);
     Route::get('/families/options', [\App\Http\Controllers\Api\FamilyController::class, 'options']);
 
     // KEUANGAN (TRANSAKSI)
