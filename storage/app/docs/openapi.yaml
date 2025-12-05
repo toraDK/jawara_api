@@ -48,6 +48,10 @@ paths:
   /api/citizens:
     $ref: "./paths/citizen/collection.yaml"
 
+  #houses
+  /api/houses:
+    $ref: "./paths/houses/collection.yaml"
+
   # Options
   /api/houses/options:
     $ref: "./paths/houses/options.yaml"
@@ -77,3 +81,11 @@ components:
       $ref: "./schemas/transaction_item.yaml"
     FinancialReport:
         $ref: "./schemas/financial_report.yaml"
+    CitizenShort:
+      $ref: "./schemas/citizen_short.yaml"
+    CitizenFull:
+      $ref: "./schemas/citizen_full.yaml"
+    CitizenCreate:
+      $ref: "./schemas/citizen_create.yaml"
+    House:
+      $ref: "./schemas/house.yaml"

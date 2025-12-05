@@ -1,0 +1,84 @@
+get:
+  tags:
+    - Houses
+  summary: Get list of houses
+  description: Retrieve all registered houses ordered by house name.
+  responses:
+    '200':
+      description: Successful response
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: Houses retrieved successfully
+              data:
+                type: array
+                items:
+                  $ref: "../../schemas/house.yaml"
+
+post:
+  tags:
+    - Houses
+  summary: Create new house
+  description: Store new house data in the database
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            house_name:
+              type: string
+              nullable: true
+              example: Perumahan Blok B-21
+            owner_name:
+              type: string
+              example: Budi Santoso
+            address:
+              type: string
+              example: Jl. Mawar No. 15, Malang
+            house_type:
+              type: string
+              example: 36 / 60
+            has_complete_facilities:
+              type: boolean
+              example: true
+            status:
+              type: string
+              nullable: true
+              example: active
+          required:
+            - owner_name
+            - address
+            - house_type
+            - has_complete_facilities
+  responses:
+    '201':
+      description: House created successfully
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: success
+              message:
+                type: string
+                example: House created successfully
+              data:
+                $ref: "../../schemas/house.yaml"
+    '422':
+      description: Validation failed
+      content:
+        application/json:
+          example:
+            status: error
+            message: Validation error

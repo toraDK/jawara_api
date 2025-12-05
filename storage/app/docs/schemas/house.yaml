@@ -1,0 +1,31 @@
+type: object
+properties:
+  id:
+    type: integer
+    example: 1
+  house_name:
+    type: string
+    example: Perum Puri Indah Blok A-10
+  owner_name:
+    type: string
+    example: Anton Wijaya
+  address:
+    type: string
+    example: Jl. Kenanga No. 12, Malang
+  house_type:
+    type: string
+    example: 45/90
+  has_complete_facilities:
+    type: boolean
+    example: true
+  status:
+    type: string
+    example: aktif
+  created_at:
+    type: string
+    format: datetime
+    example: 2025-03-10T10:00:00
+  updated_at:
+    type: string
+    format: datetime
+    example: 2025-03-10T10:00:00
