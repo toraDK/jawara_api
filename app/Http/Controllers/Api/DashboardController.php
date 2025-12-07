@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Models\Citizen;
+use App\Models\Family;
 
 class DashboardController extends Controller
 {
@@ -94,39 +95,46 @@ class DashboardController extends Controller
     {
         // Logic to gather population dashboard data
         $data = [
-            'total_families' => 500,
-            'total_population' => 2000,
-            'status_distribution' => [
-                'active' => 1800,
-                'inactive' => 200,
-            ],
-            'gender_distribution' => [
-                'male' => 1000,
-                'female' => 1000,
-            ],
-            'work_status_distribution' => [
-                'student' => 1200,
-                'other' => 800,
-            ],
-            'roles_distribution' => [
-                'head of family' => 500,
-                'child' => 800,
-                'other' => 300,
-            ],
-            'religion_distribution' => [
-                'islam' => 1500,
-                'christianity' => 300,
-                'hinduism' => 100,
-                'buddhism' => 50,
-                'other' => 50,
-            ],
-            'education_level_distribution' => [
-                'elementary school' => 500,
-                'junior high school' => 400,
-                'senior high school' => 600,
-                'diploma' => 100,
-            ],
+            'total_families' => Family::count(),
+
+            'total_population' => Citizen::count(),
+
+            // 'family_status_distribution' => Family::selectRaw('status, COUNT(*) total')
+            //     ->groupBy('status')
+            //     ->pluck('total', 'status'),
+
+            // 'ownership_status_distribution' => Family::selectRaw('ownership_status, COUNT(*) total')
+            //     ->groupBy('ownership_status')
+            //     ->pluck('total', 'ownership_status'),
+
+            // 'population_by_house' => Family::withCount('citizens')
+            //     ->pluck('citizens_count', 'house_id'),
+
+            'status_distribution' => Citizen::selectRaw('status, COUNT(*) as total')
+                ->groupBy('status')
+                ->pluck('total', 'status'),
+
+            'gender_distribution' => Citizen::selectRaw('gender, COUNT(*) as total')
+                ->groupBy('gender')
+                ->pluck('total', 'gender'),
+
+            'roles_distribution' => Citizen::selectRaw('family_role, COUNT(*) as total')
+                ->groupBy('family_role')
+                ->pluck('total', 'family_role'),
+
+            'religion_distribution' => Citizen::selectRaw('religion, COUNT(*) as total')
+                ->groupBy('religion')
+                ->pluck('total', 'religion'),
+
+            'education_level_distribution' => Citizen::selectRaw('education, COUNT(*) as total')
+                ->groupBy('education')
+                ->pluck('total', 'education'),
+
+            'occupation_distribution' => Citizen::selectRaw('occupation, COUNT(*) as total')
+                ->groupBy('occupation')
+                ->pluck('total', 'occupation'),
         ];
+
         return response()->json($data);
     }
 }
