@@ -51,7 +51,13 @@ Route::middleware('jwt.auth')->group(function () {
 
     // Warga
     Route::get('/citizens', [\App\Http\Controllers\Api\CitizensController::class, 'index']);
-    Route::post('/citizens', [\App\Http\Controllers\Api\CitizensController::class, 'store']);   
+    Route::post('/citizens', [\App\Http\Controllers\Api\CitizensController::class, 'store']);
+    
+    // DASHBOARD
+    Route::get('/dashboard/main', [\App\Http\Controllers\Api\DashboardController::class, 'mainDashboard']);
+    Route::get('/dashboard/finance', [\App\Http\Controllers\Api\DashboardController::class, 'financeDashboard']);
+    route::get('/dashboard/activity', [\App\Http\Controllers\Api\DashboardController::class, 'activityDashboard']);
+    Route::get('/dashboard/population', [\App\Http\Controllers\Api\DashboardController::class, 'populationDashboard']);
 });
 
 Route::fallback(function () {
