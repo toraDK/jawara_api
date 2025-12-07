@@ -5,8 +5,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HouseController;
 use App\Http\Controllers\Api\PaymentChannelController;
 use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\BillingController;
 use App\Http\Controllers\Api\CitizenAcceptanceController;
 use App\Http\Controllers\Api\CitizenMessageController;
+use App\Http\Controllers\Api\DuesTypeController;
 use App\Http\Controllers\Api\UserController;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -52,6 +54,20 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/aspirasi/{id}', [CitizenMessageController::class, 'show']);
     Route::put('/aspirasi/{id}', [CitizenMessageController::class, 'update']);
     Route::delete('/aspirasi/{id}', [CitizenMessageController::class, 'destroy']);
+
+    // Jenis Iuran Routes
+    Route::get('/dues-types', [DuesTypeController::class, 'index']);
+    Route::post('/dues-types', [DuesTypeController::class, 'store']);
+    Route::get('/dues-types/{id}', [DuesTypeController::class, 'show']);
+    Route::put('/dues-types/{id}', [DuesTypeController::class, 'update']);
+    Route::delete('/dues-types/{id}', [DuesTypeController::class, 'destroy']);
+
+    // Fitur Tagihan (Billings)
+    Route::get('/billings', [BillingController::class, 'index']);
+    Route::post('/billings', [BillingController::class, 'store']);
+    Route::get('/billings/{id}', [BillingController::class, 'show']);
+    Route::put('/billings/{id}', [BillingController::class, 'update']);
+    Route::delete('/billings/{id}', [BillingController::class, 'destroy']);
 });
 
 Route::fallback(function () {
