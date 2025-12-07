@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use App\Models\Citizen;
 use App\Models\Family;
+use App\Models\Activity;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -68,24 +70,30 @@ class DashboardController extends Controller
     public function activityDashboard(): JsonResponse
     {
         // Logic to gather activity dashboard data
+        $now = now();
+
         $data = [
-            'total_activities' => 150,
-            'upcoming_activities' => 5,
-            'ongoing_activities' => 5,
-            'complete_activities' => 5,
-            'type of activity' => [
-                'community and social' => 50,
-                'cleaning and security' => 30,
-                'religious' => 70,
-                'education' => 70,
-                'health and sports' => 70,
-                'other' => 70,
-            ],
-            'activities_per_month' => [
-                'January' => 10,
-                'February' => 15,
-                'March' => 20,
-            ],
+            // Total semua kegiatan
+            'total_activities' => Activity::count(),
+
+            // Berdasarkan status
+            'upcoming_activities' => Activity::where('status', 'upcoming')->count(),
+            'ongoing_activities' => Activity::where('status', 'ongoing')->count(),
+            'complete_activities' => Activity::where('status', 'completed')->count(),
+            'cancelled_activities' => Activity::where('status', 'cancelled')->count(),
+
+            // Distribusi kategori
+            'type_of_activity' => Activity::selectRaw('category, COUNT(*) AS total')
+                ->groupBy('category')
+                ->pluck('total', 'category'),
+
+            // Jumlah aktivitas per bulan
+            'activities_per_month' => Activity::selectRaw('MONTH(activity_date) AS month, COUNT(*) AS total')
+                ->groupByRaw('MONTH(activity_date)')
+                ->pluck('total', 'month')
+                ->mapWithKeys(fn ($total, $month) => [
+                    Carbon::create()->month($month)->format('F') => $total
+                ]),
         ];
 
         return response()->json($data);
