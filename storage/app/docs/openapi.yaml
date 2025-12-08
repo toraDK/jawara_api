@@ -4,10 +4,10 @@ info:
   version: 1.0.0
 
 servers:
-  - url: https://unmoaning-lenora-photomechanically.ngrok-free.dev
-    description: Ngrok Tunnel Server (Default)
   - url: http://127.0.0.1:8000
     description: Local Development Server
+  - url: https://unmoaning-lenora-photomechanically.ngrok-free.dev
+    description: Ngrok Tunnel Server (Default)
 
 paths:
   # include modular files
@@ -55,6 +55,11 @@ paths:
   #families
   /api/families:
     $ref: "./paths/families/collection.yaml"
+  # Aspirasi
+  /api/aspirasi:
+    $ref: "./paths/aspirasi/collection.yaml"
+  /api/aspirasi/{id}:
+    $ref: "./paths/aspirasi/detail.yaml"
 
   # Options
   /api/houses/options:
@@ -95,3 +100,5 @@ components:
       $ref: "./schemas/house.yaml"
     FamilyFull:
       $ref: "./schemas/family_full.yaml"
+    Aspirasi:
+      $ref: "./schemas/aspirasi.yaml"

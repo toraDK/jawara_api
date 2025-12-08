@@ -5,6 +5,11 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\HouseController;
 use App\Http\Controllers\Api\PaymentChannelController;
 use App\Http\Controllers\Api\ActivityController;
+use App\Http\Controllers\Api\BillingController;
+use App\Http\Controllers\Api\CitizenAcceptanceController;
+use App\Http\Controllers\Api\CitizenMessageController;
+use App\Http\Controllers\Api\DuesTypeController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\UserController;
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -37,9 +42,8 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/families', [\App\Http\Controllers\Api\FamilyController::class, 'index']);
     Route::get('/families/options', [\App\Http\Controllers\Api\FamilyController::class, 'options']);
 
-    // KEUANGAN (TRANSAKSI)
-    Route::get('/finance/incomes', [\App\Http\Controllers\Api\TransactionController::class, 'incomes']);
-    Route::get('/finance/expenses', [\App\Http\Controllers\Api\TransactionController::class, 'expenses']);
+    // Endpoint List Warga
+    Route::get('/citizens/verification-list', [CitizenAcceptanceController::class, 'index']);
 
     // LAPORAN
     Route::get('/finance/report', [\App\Http\Controllers\Api\TransactionController::class, 'report']);
@@ -58,6 +62,33 @@ Route::middleware('jwt.auth')->group(function () {
     Route::get('/dashboard/finance', [\App\Http\Controllers\Api\DashboardController::class, 'financeDashboard']);
     route::get('/dashboard/activity', [\App\Http\Controllers\Api\DashboardController::class, 'activityDashboard']);
     Route::get('/dashboard/population', [\App\Http\Controllers\Api\DashboardController::class, 'populationDashboard']);
+    // Aspirasi Warga Routes
+    Route::get('/aspirasi', [CitizenMessageController::class, 'index']);
+    Route::post('/aspirasi', [CitizenMessageController::class, 'store']);
+    Route::get('/aspirasi/{id}', [CitizenMessageController::class, 'show']);
+    Route::put('/aspirasi/{id}', [CitizenMessageController::class, 'update']);
+    Route::delete('/aspirasi/{id}', [CitizenMessageController::class, 'destroy']);
+
+    // Jenis Iuran Routes
+    Route::get('/dues-types', [DuesTypeController::class, 'index']);
+    Route::post('/dues-types', [DuesTypeController::class, 'store']);
+    Route::get('/dues-types/{id}', [DuesTypeController::class, 'show']);
+    Route::put('/dues-types/{id}', [DuesTypeController::class, 'update']);
+    Route::delete('/dues-types/{id}', [DuesTypeController::class, 'destroy']);
+
+    // Fitur Tagihan (Billings)
+    Route::get('/billings', [BillingController::class, 'index']);
+    Route::post('/billings', [BillingController::class, 'store']);
+    Route::get('/billings/{id}', [BillingController::class, 'show']);
+    Route::put('/billings/{id}', [BillingController::class, 'update']);
+    Route::delete('/billings/{id}', [BillingController::class, 'destroy']);
+
+    // ROUTES CRUD PEMASUKAN LAIN (Other Incomes)
+    Route::get('/other-incomes', [TransactionController::class, 'indexIncome']);       // GET List
+    Route::post('/other-incomes', [TransactionController::class, 'storeIncome']);      // POST Create
+    Route::get('/other-incomes/{id}', [TransactionController::class, 'showIncome']);   // GET Detail
+    Route::put('/other-incomes/{id}', [TransactionController::class, 'updateIncome']); // PUT Update
+    Route::delete('/other-incomes/{id}', [TransactionController::class, 'destroyIncome']); // DELETE Remove
 });
 
 Route::fallback(function () {
