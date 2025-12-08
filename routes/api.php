@@ -37,11 +37,31 @@ Route::middleware('jwt.auth')->group(function () {
 
     Route::get('/mutations', [\App\Http\Controllers\Api\MutationController::class, 'index']);
     Route::post('/mutations', [\App\Http\Controllers\Api\MutationController::class, 'store']);
+
+    // KELUARGA
+    Route::get('/families', [\App\Http\Controllers\Api\FamilyController::class, 'index']);
     Route::get('/families/options', [\App\Http\Controllers\Api\FamilyController::class, 'options']);
 
     // Endpoint List Warga
     Route::get('/citizens/verification-list', [CitizenAcceptanceController::class, 'index']);
 
+    // LAPORAN
+    Route::get('/finance/report', [\App\Http\Controllers\Api\TransactionController::class, 'report']);
+
+    // Rumah
+    // Route::resource('/houses', HouseController::class);
+    Route::get('/houses', [HouseController::class, 'index']);
+    Route::post('/houses', [HouseController::class, 'store']);
+
+    // Warga
+    Route::get('/citizens', [\App\Http\Controllers\Api\CitizensController::class, 'index']);
+    Route::post('/citizens', [\App\Http\Controllers\Api\CitizensController::class, 'store']);
+    
+    // DASHBOARD
+    Route::get('/dashboard/main', [\App\Http\Controllers\Api\DashboardController::class, 'mainDashboard']);
+    Route::get('/dashboard/finance', [\App\Http\Controllers\Api\DashboardController::class, 'financeDashboard']);
+    route::get('/dashboard/activity', [\App\Http\Controllers\Api\DashboardController::class, 'activityDashboard']);
+    Route::get('/dashboard/population', [\App\Http\Controllers\Api\DashboardController::class, 'populationDashboard']);
     // Aspirasi Warga Routes
     Route::get('/aspirasi', [CitizenMessageController::class, 'index']);
     Route::post('/aspirasi', [CitizenMessageController::class, 'store']);

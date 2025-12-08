@@ -44,6 +44,17 @@ paths:
   /api/finance/report:
     $ref: "./paths/finance/report.yaml"
 
+  # Citizens
+  /api/citizens:
+    $ref: "./paths/citizen/collection.yaml"
+
+  #houses
+  /api/houses:
+    $ref: "./paths/houses/collection.yaml"
+
+  #families
+  /api/families:
+    $ref: "./paths/families/collection.yaml"
   # Aspirasi
   /api/aspirasi:
     $ref: "./paths/aspirasi/collection.yaml"
@@ -79,5 +90,15 @@ components:
       $ref: "./schemas/transaction_item.yaml"
     FinancialReport:
         $ref: "./schemas/financial_report.yaml"
+    CitizenShort:
+      $ref: "./schemas/citizen_short.yaml"
+    CitizenFull:
+      $ref: "./schemas/citizen_full.yaml"
+    CitizenCreate:
+      $ref: "./schemas/citizen_create.yaml"
+    House:
+      $ref: "./schemas/house.yaml"
+    FamilyFull:
+      $ref: "./schemas/family_full.yaml"
     Aspirasi:
       $ref: "./schemas/aspirasi.yaml"
